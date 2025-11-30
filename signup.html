@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Create account — The Chef's Corner</title>
+    <meta name="description" content="Sign up for The Chef's Corner to save recipes and plan meals." />
+
+    <style>
+      :root{
+        --brand: #e67e22; /* warm food accent */
+        --muted: #6b7280;
+        --card-bg: #fffaf6;
+        --accent-2: #2ecc71;
+      }
+      *{box-sizing:border-box}
+      body{
+        margin:0;
+        font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+        background: linear-gradient(180deg, #fff7f1 0%, #fff6ed 40%);
+        color:#111827;
+        -webkit-font-smoothing:antialiased;
+        -moz-osx-font-smoothing:grayscale;
+        min-height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        padding:24px;
+      }
+
+      /* Container */
+      .signup-wrap{
+        width:100%;
+        max-width:480px;
+        background:var(--card-bg);
+        border-radius:16px;
+        box-shadow: 0 8px 30px rgba(15,23,42,0.08);
+        padding:28px;
+        border:1px solid rgba(230,126,34,0.06);
+      }
+
+      header.site-head{ display:flex; gap:12px; align-items:center; margin-bottom:8px }
+      .logo-mark{ width:48px; height:48px; border-radius:10px; background:linear-gradient(135deg,#ffd59a,#ff9e6b); display:flex; align-items:center; justify-content:center; box-shadow: inset 0 -6px 10px rgba(0,0,0,0.04); }
+      .logo-mark img{ width:36px; height:36px; object-fit:cover; border-radius:6px }
+      .brand h1{ font-size:1.15rem; margin:0; color:var(--brand); }
+      .brand p{ margin:0; font-size:0.85rem; color:var(--muted) }
+
+      h2.title{ margin-top:18px; margin-bottom:12px; font-size:1.45rem }
+
+      form{ display:flex; flex-direction:column; gap:12px; }
+      label{ font-size:0.9rem; color:var(--muted); font-weight:600 }
+      input[type="text"], input[type="email"], input[type="password"]{
+        width:100%;
+        padding:12px 14px;
+        border-radius:10px;
+        border:1px solid rgba(15,23,42,0.06);
+        background:#fff;
+        font-size:0.98rem;
+        transition:box-shadow .14s, transform .08s;
+      }
+      input:focus{ outline:none; box-shadow:0 6px 18px rgba(230,126,34,0.08); transform:translateY(-1px) }
+
+      .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px }
+      @media(max-width:520px){ .field-row{ grid-template-columns:1fr } }
+
+      .err{ color:#dc2626; font-size:0.85rem; display:none }
+      .err.active{ display:block }
+
+      .btn-primary{
+        display:inline-flex; align-items:center; justify-content:center; gap:8px;
+        background:var(--brand); color:white; border:none; padding:12px 16px; border-radius:10px; font-weight:700; cursor:pointer; font-size:1rem;
+        box-shadow: 0 8px 24px rgba(230,126,34,0.12);
+      }
+      .btn-primary:disabled{ opacity:0.6; cursor:not-allowed }
+
+      .muted-link{ font-size:0.95rem; color:var(--muted); text-align:center; margin-top:8px }
+      .muted-link a{ color:var(--brand); font-weight:600; text-decoration:none }
+
+      .toast{ position:fixed; left:50%; transform:translateX(-50%); bottom:28px; background:rgba(10,10,10,0.9); color:#fff; padding:10px 14px; border-radius:999px; display:none }
+      .toast.show{ display:block }
+    </style>
+    <style>
+      :root{ --orange:#e67e22; --green:#2ecc71; --bg:#fff; --text:#333; --muted:#6b7280 }
+      .tcc-nav{ position:sticky; top:0; z-index:1200; background:rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-bottom:1px solid rgba(15,23,42,0.04); }
+      .tcc-inner{ max-width:1200px; margin:0 auto; height:64px; display:flex; align-items:center; justify-content:space-between; padding:0 18px }
+      .tcc-logo{ font-weight:900; color:var(--orange); }
+      .tcc-menu{ display:flex; gap:10px; list-style:none; margin:0; padding:0 }
+    </style>
+  </head>
+  <body>
+
+  <!-- NAVBAR START -->
+  <header class="navbar">
+    <div class="logo">The Chef's Corner</div>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="front.html">Home</a>
+      <a href="recipes.html">Recipes</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="signin.html" class="btn-signin">Sign In</a>
+      <a href="signup.html" class="btn-signup">Sign Up</a>
+    </nav>
+
+    <!-- Mobile Menu Icon -->
+    <div class="hamburger" onclick="toggleMenu()">
+      ☰
+    </div>
+  </header>
+
+  <style>
+  /* NAVBAR STYLING */
+  .navbar {
+    width: 100%;
+    padding: 15px 40px;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #e67e22;
+  }
+
+  .nav-links a {
+    margin-left: 25px;
+    text-decoration: none;
+    color: #444;
+    font-weight: 600;
+    transition: color .2s;
+  }
+
+  .nav-links a:hover {
+    color: #e67e22;
+  }
+
+  /* Buttons */
+  .btn-signin {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #3498db;
+    color: white !important;
+  }
+
+  .btn-signup {
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #2ecc71;
+    color: white !important;
+  }
+
+  .btn-signin:hover { background: #2980b9 !important; }
+  .btn-signup:hover { background: #27ae60 !important; }
+
+  /* MOBILE MENU */
+  .hamburger {
+    display: none;
+    font-size: 28px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 850px) {
+    .nav-links {
+      position: absolute;
+      right: 0;
+      top: 70px;
+      background: white;
+      width: 100%;
+      text-align: center;
+      flex-direction: column;
+      padding: 20px 0;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    .nav-links a {
+      display: block;
+      margin: 12px 0;
+    }
+
+    .hamburger {
+      display: block;
+    }
+  }
+  </style>
+
+  <script>
+  function toggleMenu() {
+    const nav = document.getElementById("navLinks");
+    nav.style.display = (nav.style.display === "block") ? "none" : "block";
+  }
+  </script>
+  <!-- NAVBAR END -->
+    <main class="signup-wrap" role="main">
+      <a href="front.html" aria-label="Back to landing" style="text-decoration:none;color:inherit;">
+        <div class="site-head">
+          <div class="logo-mark" aria-hidden="true">
+            <!-- simple fork icon using svg -->
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 3v6" stroke="#7A2E0A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 3v6" stroke="#7A2E0A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 9c0 1.657-1.343 3-3 3s-3-1.343-3-3" stroke="#7A2E0A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12 9c0 1.657-1.343 3-3 3s-3-1.343-3-3" stroke="#7A2E0A" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="brand">
+            <h1>The Chef's Corner</h1>
+            <p>Save recipes, plan meals, and cook with confidence.</p>
+          </div>
+        </div>
+      </a>
+
+      <h2 class="title">Create an account</h2>
+
+      <form id="signupForm" novalidate>
+        <div>
+          <label for="fullName">Full name</label>
+          <input id="fullName" name="fullName" type="text" placeholder="e.g., Jamie Oliver" required autocomplete="name" />
+          <div id="errName" class="err">Please enter your full name.</div>
+        </div>
+
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com" required autocomplete="email" />
+          <div id="errEmail" class="err">Please enter a valid email address.</div>
+        </div>
+
+        <div class="field-row">
+          <div>
+            <label for="password">Password</label>
+            <input id="password" name="password" type="password" placeholder="Create a password" required autocomplete="new-password" />
+            <div id="errPass" class="err">Password must be at least 6 characters.</div>
+          </div>
+          <div>
+            <label for="confirmPassword">Confirm password</label>
+            <input id="confirmPassword" name="confirmPassword" type="password" placeholder="Repeat password" required autocomplete="new-password" />
+            <div id="errMatch" class="err">Passwords do not match.</div>
+          </div>
+        </div>
+
+        <button id="createAccount" type="submit" class="btn-primary">Create Account</button>
+      </form>
+
+      <div class="muted-link">Already have an account? <a href="signin.html">Sign In</a></div>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script>
+      (function(){
+        const form = document.getElementById('signupForm');
+        const fullName = document.getElementById('fullName');
+        const email = document.getElementById('email');
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        const errName = document.getElementById('errName');
+        const errEmail = document.getElementById('errEmail');
+        const errPass = document.getElementById('errPass');
+        const errMatch = document.getElementById('errMatch');
+
+        const toast = document.getElementById('toast');
+
+        function showError(el){ el.classList.add('active'); }
+        function hideError(el){ el.classList.remove('active'); }
+
+        function validateEmail(value){
+          // simple email check
+          return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+        }
+
+        function showToast(message){
+          toast.textContent = message;
+          toast.classList.add('show');
+          setTimeout(()=> toast.classList.remove('show'), 2500);
+        }
+
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          let ok = true;
+
+          // name
+          if(!fullName.value.trim()){ showError(errName); ok = false } else { hideError(errName) }
+
+          // email
+          if(!validateEmail(email.value.trim())){ showError(errEmail); ok = false } else { hideError(errEmail) }
+
+          // password length
+          if(!password.value || password.value.length < 6){ showError(errPass); ok = false } else { hideError(errPass) }
+
+          // match
+          if(password.value !== confirmPassword.value){ showError(errMatch); ok = false } else { hideError(errMatch) }
+
+          if(!ok){
+            showToast('Please fix the errors above.');
+            return;
+          }
+
+          // Simulate account creation (client-only demo): store minimal profile in localStorage
+          try{
+            const profile = { name: fullName.value.trim(), email: email.value.trim(), created: Date.now() };
+            localStorage.setItem('chef_profile', JSON.stringify(profile));
+          }catch(err){ /* ignore */ }
+
+          showToast('Account created — redirecting...');
+          // small delay then go to sign-in
+          setTimeout(()=> { window.location.href = 'signin.html'; }, 1100);
+        });
+
+        // small UX: clear errors on input
+        [fullName, email, password, confirmPassword].forEach(input => {
+          input.addEventListener('input', function(){
+            if(input === fullName) hideError(errName);
+            if(input === email && validateEmail(email.value)) hideError(errEmail);
+            if(input === password && password.value.length >= 6) hideError(errPass);
+            if(input === confirmPassword && password.value === confirmPassword.value) hideError(errMatch);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

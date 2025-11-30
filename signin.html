@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Sign In — The Chef's Corner</title>
+    <meta name="description" content="Sign in to The Chef's Corner to save recipes and manage your profile." />
+    <!-- Optional font: Poppins from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root{
+        --orange:#e67e22;
+        --green:#2ecc71;
+        --blue:#3498db;
+        --bg:#f9f9f9;
+        --card:#ffffff;
+        --text:#111827;
+        --muted:#6b7280;
+        --radius:14px;
+      }
+      *{box-sizing:border-box}
+      html,body{height:100%;margin:0;font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,Arial;color:var(--text);background:var(--bg)}
+
+      /* NAVBAR (user-provided clean snippet) */
+      .navbar{ width:100%; padding:15px 28px; background:#fff; box-shadow:0 4px 18px rgba(15,23,42,0.06); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:1000 }
+      .logo{ font-size:1.6rem; font-weight:700; color:var(--orange) }
+      .nav-links{ display:flex; align-items:center; gap:14px }
+      .nav-links a{ color:#444; text-decoration:none; font-weight:600; padding:8px 10px; border-radius:8px; transition:all .16s }
+      .nav-links a:hover{ color:var(--orange); transform:translateY(-2px) }
+      .btn-signin{ padding:8px 12px; border-radius:6px; background:var(--blue); color:#fff !important }
+      .btn-signup{ padding:8px 12px; border-radius:6px; background:var(--green); color:#fff !important }
+      .hamburger{ display:none; font-size:26px; cursor:pointer }
+      @media(max-width:850px){ .nav-links{ position:absolute; right:0; top:64px; background:#fff; width:100%; display:none; flex-direction:column; padding:18px 0; box-shadow:0 8px 28px rgba(2,6,23,0.08) } .hamburger{ display:block } }
+
+      /* Centered sign-in card */
+      .wrap{ min-height:calc(100vh - 84px); display:grid; place-items:center; padding:36px 20px }
+      .card{ width:100%; max-width:420px; background:var(--card); border-radius:12px; box-shadow:0 18px 40px rgba(2,6,23,0.06); padding:28px; }
+      .card h2{ margin:0 0 8px; color:var(--orange); font-size:1.6rem }
+      .card p.sub{ margin:0 0 18px; color:var(--muted); font-size:0.95rem }
+
+      .field{ position:relative; margin-bottom:14px }
+      .field input{ width:100%; padding:12px 14px 12px 40px; border-radius:10px; border:1px solid rgba(15,23,42,0.06); font-size:1rem; background:#fff }
+      .field .icon{ position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:16px }
+
+      .submit{ width:100%; padding:12px; border-radius:10px; border:0; background:var(--orange); color:#fff; font-weight:700; cursor:pointer; transition:background .14s, transform .12s }
+      .submit:hover{ background:#d96918; transform:translateY(-2px) }
+
+      .forgot{ display:block; text-align:right; margin-top:10px; color:var(--muted); text-decoration:none; font-size:0.95rem }
+      .forgot:hover{ color:var(--orange) }
+
+      /* small footer note */
+      .card-footer{ margin-top:16px; text-align:center; color:var(--muted); font-size:0.95rem }
+
+      /* Responsive tweaks */
+      @media(max-width:480px){ .card{ padding:20px; margin:0 8px } .logo{ font-size:1.25rem } }
+    </style>
+  </head>
+  <body>
+
+    <!-- NAVBAR START -->
+    <header class="navbar">
+      <div class="logo">The Chef's Corner</div>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="front.html">Home</a>
+        <a href="recipes.html">Recipes</a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+        <a href="signin.html" class="btn-signin">Sign In</a>
+        <a href="signup.html" class="btn-signup">Sign Up</a>
+      </nav>
+
+      <!-- Mobile Menu Icon -->
+      <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </header>
+    <!-- NAVBAR END -->
+
+    <main class="wrap">
+      <section class="card" aria-labelledby="signinHeading">
+        <h2 id="signinHeading">Sign In</h2>
+        <p class="sub">Welcome back — sign in to access your saved recipes and personalized recommendations.</p>
+
+        <form id="signinForm" novalidate>
+          <div class="field">
+            <span class="icon" aria-hidden="true">📧</span>
+            <input id="email" name="email" type="email" placeholder="you@example.com" required aria-label="Email address">
+          </div>
+
+          <div class="field">
+            <span class="icon" aria-hidden="true">🔒</span>
+            <input id="password" name="password" type="password" placeholder="Password" required aria-label="Password">
+          </div>
+
+          <button type="submit" class="submit">Sign In</button>
+          <a class="forgot" href="#">Forgot Password?</a>
+        </form>
+
+        <div class="card-footer">New here? <a href="signup.html" style="color:var(--orange);font-weight:700;text-decoration:none">Create an account</a></div>
+      </section>
+    </main>
+
+    <script>
+      // mobile menu toggle
+      function toggleMenu(){ const nav = document.getElementById('navLinks'); nav.style.display = (nav.style.display === 'block') ? '' : 'block'; }
+
+      // simple client-side sign-in demo
+      (function(){
+        const form = document.getElementById('signinForm');
+        form.addEventListener('submit', function(e){
+          e.preventDefault();
+          const email = document.getElementById('email').value.trim();
+          const password = document.getElementById('password').value;
+          if(!email || !password){ alert('Please fill email and password'); return; }
+          // demo: store last signed-in email
+          try{ localStorage.setItem('last_signed_in', JSON.stringify({ email: email, time: Date.now() })); }catch(e){}
+          alert('Signed in (demo). Redirecting to recipes...');
+          setTimeout(()=> { window.location.href = 'recipes.html'; }, 700);
+        });
+      })();
+    </script>
+  </body>
+</html>
