@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About — The Chef's Corner</title>
+
+    <style>
+      :root{ --brand:#e67e22; --muted:#6b7280; }
+      *{box-sizing:border-box}
+      body{ margin:0; font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial; background:linear-gradient(180deg,#fffaf6,#fff5ee); color:#111827; }
+
+      .navbar{ display:flex; justify-content:space-between; align-items:center; padding:18px 24px; background:#fff; box-shadow:0 6px 20px rgba(15,23,42,0.06); }
+      .logo{ font-size:1.25rem; color:var(--brand); font-weight:700 }
+      .nav-links{ display:flex; gap:12px }
+      .nav-links a{ text-decoration:none; color:#374151; padding:8px 12px; border-radius:8px; font-weight:600 }
+      .nav-links a.sign-in{ background:var(--brand); color:#fff }
+
+      .hero{ max-width:1100px; margin:28px auto; padding:36px 20px; text-align:center }
+      .hero h1{ font-size:2rem; margin:0 0 8px; color:var(--brand) }
+      .hero p{ color:var(--muted); font-size:1rem; margin:0 }
+
+      .container{ max-width:1100px; margin:20px auto; padding:0 20px }
+      .grid{ display:grid; gap:24px }
+      @media(min-width:900px){ .grid{ grid-template-columns: 2fr 1fr; } }
+
+      .card{ background:#fff; padding:18px; border-radius:12px; box-shadow:0 8px 30px rgba(2,6,23,0.06) }
+
+      .creator{ display:flex; gap:16px; align-items:center }
+      .avatar{ width:88px; height:88px; border-radius:12px; object-fit:cover; box-shadow:0 8px 20px rgba(15,23,42,0.06) }
+      .creator h3{ margin:0 }
+      .creator p{ margin:6px 0 0; color:var(--muted) }
+
+      /* reveal animation */
+      .reveal{ opacity:0; transform:translateY(18px); transition: all 520ms cubic-bezier(.2,.9,.2,1); }
+      .reveal.active{ opacity:1; transform:translateY(0); }
+
+      footer{ max-width:1100px; margin:28px auto; padding:12px 20px; color:var(--muted); font-size:0.95rem; text-align:center }
+    </style>
+    <style>
+      :root{ --orange:#e67e22; --green:#2ecc71; --bg:#fff; --text:#333; --muted:#6b7280; --card-shadow:0 10px 30px rgba(2,6,23,0.06); --nav-height:64px }
+      .tcc-nav{ position:sticky; top:0; z-index:1200; background:rgba(255,255,255,0.95); backdrop-filter: blur(6px); border-bottom:1px solid rgba(15,23,42,0.04); }
+      .tcc-inner{ max-width:1200px; margin:0 auto; height:var(--nav-height); display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 18px }
+      .tcc-logo{ font-weight:900; color:var(--orange); font-size:1.05rem }
+      .tcc-menu{ display:flex; gap:10px; list-style:none; margin:0; padding:0 }
+      .tcc-user{ display:flex; gap:10px }
+      .tcc-footer{ margin-top:42px; background:#08121a; color:#cfe8ff; padding:28px 18px; }
+    </style>
+  </head>
+  <body>
+
+    <!-- NAVBAR START -->
+    <header class="navbar">
+        <div class="logo">The Chef's Corner</div>
+
+        <nav class="nav-links" id="navLinks">
+            <a href="front.html">Home</a>
+            <a href="recipes.html">Recipes</a>
+            <a href="about.html">About</a>
+            <a href="contact.html">Contact</a>
+            <a href="signin.html" class="btn-signin">Sign In</a>
+            <a href="signup.html" class="btn-signup">Sign Up</a>
+        </nav>
+
+        <!-- Mobile Menu Icon -->
+        <div class="hamburger" onclick="toggleMenu()">
+            ☰
+        </div>
+    </header>
+
+    <style>
+    /* NAVBAR STYLING */
+    .navbar {
+        width: 100%;
+        padding: 15px 40px;
+        background-color: #fff;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #e67e22;
+    }
+
+    .nav-links a {
+        margin-left: 25px;
+        text-decoration: none;
+        color: #444;
+        font-weight: 600;
+        transition: color .2s;
+    }
+
+    .nav-links a:hover {
+        color: #e67e22;
+    }
+
+    /* Buttons */
+    .btn-signin {
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #3498db;
+        color: white !important;
+    }
+
+    .btn-signup {
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #2ecc71;
+        color: white !important;
+    }
+
+    .btn-signin:hover { background: #2980b9 !important; }
+    .btn-signup:hover { background: #27ae60 !important; }
+
+    /* MOBILE MENU */
+    .hamburger {
+        display: none;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 850px) {
+        .nav-links {
+            position: absolute;
+            right: 0;
+            top: 70px;
+            background: white;
+            width: 100%;
+            text-align: center;
+            flex-direction: column;
+            padding: 20px 0;
+            display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .nav-links a {
+            display: block;
+            margin: 12px 0;
+        }
+
+        .hamburger {
+            display: block;
+        }
+    }
+    </style>
+
+    <script>
+    function toggleMenu() {
+        const nav = document.getElementById("navLinks");
+        nav.style.display = (nav.style.display === "block") ? "none" : "block";
+    }
+    </script>
+    <!-- NAVBAR END -->
+
+    <section class="hero">
+      <h1>About The Chef's Corner</h1>
+      <p>We help home cooks discover recipes, organize meal plans, and cook confidently with simple, delicious ideas.</p>
+    </section>
+
+    <main class="container">
+      <div class="grid">
+        <div class="card reveal" id="mission">
+          <h2>Our Purpose</h2>
+          <p>At The Chef's Corner we curate recipes from chefs and home cooks around the world. We make cooking approachable by providing clear instructions, useful tips, and meal planning tools to help you eat better without the stress.</p>
+
+          <h2 style="margin-top:16px">Our Mission</h2>
+          <p>To inspire and empower people to cook more at home — by making recipes accessible, adaptable, and fun. We focus on clarity, flavors, and practical techniques.</p>
+
+          <h2 style="margin-top:16px">Features</h2>
+          <ul>
+            <li>AI-assisted recipe suggestions from your pantry</li>
+            <li>Save and organize favorite recipes</li>
+            <li>Weekly meal planner and shopping list export</li>
+          </ul>
+        </div>
+
+        <aside class="card reveal" id="creator">
+          <h2>Meet the Creator — Shaguftha Syed</h2>
+          <div class="creator" style="margin-top:12px">
+            <img class="avatar" src="https://media.craiyon.com/2025-04-09/KD6qbdyyR3CMAF4DMTULGA.webp" alt="Shaguftha Syed">
+            <div>
+              <h3>Shaguftha Syed</h3>
+              <p>Food lover, developer, and recipe tinkerer. Shaguftha built this project to share the joy of everyday cooking and practical meal planning.</p>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer>
+      Built with care • © <span id="year"></span> The Chef's Corner
+    </footer>
+
+    <script>
+      // simple reveal-on-scroll using IntersectionObserver
+      document.addEventListener('DOMContentLoaded', function(){
+        document.getElementById('year').textContent = new Date().getFullYear();
+        const reveals = document.querySelectorAll('.reveal');
+        if('IntersectionObserver' in window){
+          const obs = new IntersectionObserver((entries)=>{
+            entries.forEach(entry=>{
+              if(entry.isIntersecting){ entry.target.classList.add('active'); obs.unobserve(entry.target); }
+            });
+          }, { root: null, threshold: 0.12 });
+          reveals.forEach(r=>obs.observe(r));
+        } else {
+          // fallback: just activate
+          reveals.forEach(r=>r.classList.add('active'));
+        }
+      });
+    </script>
+  </body>
+</html>

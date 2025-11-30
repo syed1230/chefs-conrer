@@ -1,0 +1,96 @@
+/* External stylesheet moved from front.html */
+
+/* Basic Reset for cleaner styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+body {
+    background-color: #f7f7f7; /* Light background */
+    color: #333;
+}
+
+/* --- Navigation Bar Styling --- */
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Puts logo on left, links on right */
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #fff; /* White background for the bar */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.logo {
+    font-size: 1.8em;
+    color: #e67e22; /* A nice food-related color */
+}
+
+.nav-link {
+    text-decoration: none; /* Removes underline from links */
+    color: #555;
+    margin-left: 20px;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.nav-link:hover {
+    color: #e67e22;
+}
+
+/* Style the Sign In link to look a bit different */
+.sign-in-link {
+    background-color: #3498db; /* A button-like background color */
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+}
+
+.sign-in-link:hover {
+    background-color: #2980b9;
+    color: white;
+}
+
+/* --- Hero Section Styling (The main page content) --- */
+.hero-section {
+    height: 80vh; /* Takes up most of the screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 600px;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.hero-content h2 {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    color: #e67e22;
+}
+
+.hero-content p {
+    font-size: 1.1em;
+    margin-bottom: 30px;
+}
+
+/* Call-to-Action Button */
+.cta-button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: #2ecc71; /* A friendly green color */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.cta-button:hover {
+    background-color: #27ae60;
+}

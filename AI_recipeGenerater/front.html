@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>The Chef's Corner — Discover Delicious Recipes</title>
+    <meta name="description" content="The Chef's Corner — Discover, save, and cook delicious recipes. Healthy • Tasty • Easy.">
+
+    <style>
+        :root{
+            --orange:#e67e22;
+            --green:#2ecc71;
+            --white:#ffffff;
+            --text:#333333;
+            --muted:#6b7280;
+            --radius:14px;
+            --card-shadow: 0 12px 30px rgba(20,20,20,0.08);
+            --nav-height:70px;
+            --max-width:1200px;
+        }
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,'Noto Sans',sans-serif;color:var(--text);background:#fff}
+
+        /* NAVBAR */
+        .tcc-nav{ position:sticky; top:0; z-index:1200; background:rgba(255,255,255,0.96); backdrop-filter: blur(6px); border-bottom:1px solid rgba(0,0,0,0.06) }
+        .tcc-inner{ max-width:var(--max-width); margin:0 auto; height:var(--nav-height); display:flex; align-items:center; justify-content:space-between; gap:20px; padding:0 20px }
+        .tcc-brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit }
+        .tcc-logo{ font-weight:900; color:var(--orange); font-size:1.05rem; letter-spacing:0.2px }
+        .tcc-menu{ display:flex; align-items:center; gap:6px; list-style:none; margin:0; padding:0 }
+        .tcc-menu > li{ position:relative }
+        .tcc-menu a{ display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:10px; text-decoration:none; color:var(--text); font-weight:600; transition:all .18s ease }
+        .tcc-menu a:hover{ background: rgba(230,126,34,0.06); transform:translateY(-2px) }
+        .tcc-btn{ padding:9px 14px; border-radius:10px; border:1px solid rgba(0,0,0,0.06); background:transparent; cursor:pointer; font-weight:700 }
+        .tcc-btn.primary{ background:linear-gradient(90deg,var(--orange),#ff9a3d); color:#fff; border:0; box-shadow:0 10px 30px rgba(230,126,34,0.12) }
+
+        /* Dropdown */
+        .tcc-dropdown-menu{ position:absolute; top:calc(var(--nav-height) - 10px); left:0; transform-origin:top; min-width:280px; background:var(--white); border-radius:12px; box-shadow:var(--card-shadow); padding:12px; opacity:0; transform:translateY(-10px) scale(.98); transition:all 210ms cubic-bezier(.2,.9,.2,1); pointer-events:none }
+        .tcc-dropdown.open .tcc-dropdown-menu{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto }
+        .tcc-dropdown-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px }
+        .tcc-dropdown-menu a{ display:block; padding:8px 10px; border-radius:8px; color:var(--text); font-weight:600 }
+
+        /* Hamburger (mobile) */
+        .tcc-hamburger{ display:none; background:transparent; border:0; font-size:22px; cursor:pointer }
+        @media (max-width:920px){
+            .tcc-menu{ display:none; position:absolute; left:0; right:0; top:var(--nav-height); background:#fff; flex-direction:column; padding:14px; gap:6px; box-shadow:0 20px 40px rgba(0,0,0,0.06) }
+            .tcc-hamburger{ display:inline-flex }
+            .tcc-user{ gap:8px }
+            .tcc-inner{ padding:0 12px }
+        }
+
+        /* HERO / SLIDER */
+        .hero{ max-width:var(--max-width); margin:18px auto 28px; position:relative; overflow:hidden; border-radius:var(--radius); height:68vh; min-height:420px }
+        .slides{ position:relative; width:100%; height:100% }
+        .slide{ position:absolute; inset:0; background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; transition:opacity .8s ease, transform .8s ease; opacity:0; transform:scale(.995) }
+        .slide.active{ opacity:1; transform:scale(1) }
+        .slide-overlay{ position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.35)); border-radius:var(--radius) }
+        .hero-content{ position:relative; z-index:4; padding:36px; color:#fff; max-width:900px; text-align:left }
+        .hero h1{ font-size:2.4rem; margin:0 0 10px; line-height:1.03 }
+        .hero p{ margin:0 0 20px; color:rgba(255,255,255,0.9); font-weight:600 }
+        .hero .cta{ display:inline-flex; align-items:center; gap:10px; padding:12px 18px; border-radius:12px; background:var(--orange); color:#fff; font-weight:800; text-decoration:none; box-shadow:0 10px 30px rgba(230,126,34,0.16) }
+
+        /* Slider controls */
+        .slider-controls{ position:absolute; left:18px; right:18px; bottom:18px; display:flex; justify-content:space-between; align-items:center; z-index:6 }
+        .dots{ display:flex; gap:8px }
+        .dot{ width:10px; height:10px; background:rgba(255,255,255,0.46); border-radius:10px; cursor:pointer; transition:all .18s }
+        .dot.active{ background:#fff; transform:scale(1.1) }
+        .arrow{ background:rgba(0,0,0,0.4); color:#fff; padding:10px; border-radius:10px; cursor:pointer; border:0 }
+
+        /* FEATURE CARDS */
+        .features{ max-width:var(--max-width); margin:28px auto; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; padding:0 20px }
+        .card{ background:#fff; border-radius:12px; box-shadow:var(--card-shadow); padding:20px; display:flex; gap:12px; align-items:center; transition:transform .160s ease, box-shadow .120s }
+        .card:hover{ transform:translateY(-6px) scale(1.01) }
+        .card svg{ width:52px; height:52px; border-radius:10px; background:linear-gradient(135deg, rgba(230,126,34,0.12), rgba(46,204,113,0.08)); padding:10px }
+        .card h3{ margin:0 0 6px; font-size:1.05rem }
+        .card p{ margin:0; color:var(--muted) }
+        @media (max-width:920px){ .features{ grid-template-columns:1fr; padding:0 14px } .hero{ height:56vh } .hero h1{ font-size:1.6rem } }
+
+        /* HOW IT WORKS */
+        .how{ max-width:var(--max-width); margin:22px auto; padding:18px; display:grid; grid-template-columns:repeat(4,1fr); gap:16px }
+        .step{ background:#fff; border-radius:12px; padding:18px; box-shadow:var(--card-shadow); text-align:center }
+        .step svg{ width:46px; height:46px; margin-bottom:10px }
+        .step h4{ margin:0 0 8px }
+        .step p{ margin:0; color:var(--muted) }
+        @media (max-width:920px){ .how{ grid-template-columns:repeat(2,1fr) } }
+
+        /* FOOTER */
+        footer{ background:#08121a; color:#cfe8ff; padding:32px 20px; margin-top:28px }
+        .footer-inner{ max-width:var(--max-width); margin:0 auto; display:flex; gap:28px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap }
+        .sitemap{ display:flex; gap:20px; flex-wrap:wrap }
+        .sitemap .col{ min-width:160px }
+        .sitemap h5{ margin:0 0 8px; color:#fff }
+        .sitemap a{ display:block; color:#cfe8ff; text-decoration:none; margin:6px 0; font-weight:600 }
+        .socials{ display:flex; gap:12px; align-items:center }
+        .copyright{ color:rgba(255,255,255,0.7); margin-top:8px }
+
+        /* small helpers */
+        .muted{ color:var(--muted) }
+    </style>
+</head>
+<body>
+
+    <!-- NAV -->
+    <nav class="tcc-nav" aria-label="Primary">
+        <div class="tcc-inner">
+            <a class="tcc-brand" href="front.html">
+                <div class="tcc-logo">The Chef's Corner</div>
+            </a>
+
+            <ul class="tcc-menu" role="menubar" aria-label="Main menu">
+                <li role="none"><a role="menuitem" href="front.html">Home</a></li>
+                <li role="none"><a role="menuitem" href="index.html">Browse page</a></li>
+                <li class="tcc-dropdown" role="none">
+                    <a role="menuitem" href="recipes.html" aria-haspopup="true">Recipes ▾</a>
+                    <div class="tcc-dropdown-menu" role="menu">
+                        <a role="menuitem" href="recipes.html">All Recipes</a>
+                        <a role="menuitem" href="recipes.html#popular">Popular Recipes</a>
+                        <a role="menuitem" href="recipes.html#new">New Recipes</a>
+                        <div class="tcc-dropdown-grid">
+                            <a role="menuitem" href="recipes.html#breakfast">Breakfast</a>
+                            <a role="menuitem" href="recipes.html#lunch">Lunch</a>
+                            <a role="menuitem" href="recipes.html#dinner">Dinner</a>
+                            <a role="menuitem" href="recipes.html#desserts">Desserts</a>
+                        </div>
+                    </div>
+                </li>
+
+                <li role="none"><a role="menuitem" href="about.html">About Us</a></li>
+                <li role="none"><a role="menuitem" href="contact.html">Contact Us</a></li>
+            </ul>
+
+            <div class="tcc-user">
+                <a class="tcc-btn" href="signin.html">Sign In</a>
+                <a class="tcc-btn primary" href="signup.html">Sign Up</a>
+                <button id="hamburger" class="tcc-hamburger" aria-label="Open menu" aria-expanded="false">☰</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO / SLIDER -->
+    <section class="hero" aria-label="Featured recipes slider">
+        <div class="slides" id="slides">
+            <div class="slide active" data-index="0" style="background-image:url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1600&auto=format&fit=crop&s=')">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+                    <h1>Discover Delicious Recipes</h1>
+                    <p>Cook like a chef — healthy, tasty, and easy recipes curated for you.</p>
+                    <a class="cta" href="recipes.html">Browse Recipes</a>
+                </div>
+            </div>
+
+            <div class="slide" data-index="1" style="background-image:url('https://xtrema.com/cdn/shop/articles/chef-cooker-cooking-8717-653757.jpg?v=1613545298')">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+                    <h1>Cook Like a Chef!</h1>
+                    <p>Step-by-step guides and chef tips to level up your home cooking.</p>
+                    <a class="cta" href="recipes.html">Explore Popular</a>
+                </div>
+            </div>
+
+            <div class="slide" data-index="2" style="background-image:url('https://images.unsplash.com/photo-1490645935967-10de6ba17061?q=80&w=1600&auto=format&fit=crop&s=')">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+                    <h1>Healthy • Tasty • Easy</h1>
+                    <p>Find nutritious meals that never compromise on flavor.</p>
+                    <a class="cta" href="recipes.html">See New Recipes</a>
+                </div>
+            </div>
+
+            <div class="slide" data-index="3" style="background-image:url('https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1600&auto=format&fit=crop&s=')">
+                <div class="slide-overlay"></div>
+                <div class="hero-content">
+                    <h1>Share & Save Favorites</h1>
+                    <p>Create your own collection and never lose a recipe again.</p>
+                    <a class="cta" href="signup.html">Join Our Community</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="slider-controls" aria-hidden="false">
+            <div class="arrows">
+                <button class="arrow" id="prev" aria-label="Previous slide">◀</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div class="dots" id="dots" role="tablist"></div>
+                <button class="arrow" id="next" aria-label="Next slide">▶</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="features" aria-label="Featured categories">
+        <a class="card" href="recipes.html" aria-label="Explore all recipes">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2v20" stroke="#e67e22" stroke-width="2" stroke-linecap="round"/></svg>
+            <div>
+                <h3>Explore All Recipes</h3>
+                <p class="muted">Thousands of dishes from around the globe.</p>
+            </div>
+        </a>
+
+        <a class="card" href="signup.html" aria-label="Join our community">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3" stroke="#2ecc71" stroke-width="2"/><path d="M6 20c1.5-3 5-4 6-4s4.5 1 6 4" stroke="#2ecc71" stroke-width="2" stroke-linecap="round"/></svg>
+            <div>
+                <h3>Join Our Community</h3>
+                <p class="muted">Save favorites, get recommendations, and share tips.</p>
+            </div>
+        </a>
+
+        <a class="card" href="about.html" aria-label="Learn more about us">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 7h7l-5.5 4 2 7L12 17l-6.5 3 2-7L2 9h7l3-7z" stroke="#e67e22" stroke-width="1.2" fill="rgba(230,126,34,0.06)"/></svg>
+            <div>
+                <h3>Learn More About Us</h3>
+                <p class="muted">Our mission: great food, better living.</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how" aria-label="How it works">
+        <div class="step">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 12h18" stroke="#e67e22" stroke-width="2" stroke-linecap="round"/></svg>
+            <h4>Browse Thousands<small style="display:block;color:var(--muted);font-weight:600">of Recipes</small></h4>
+            <p class="muted">Search by ingredient, cuisine, or dietary need.</p>
+        </div>
+
+        <div class="step">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2v6" stroke="#2ecc71" stroke-width="2" stroke-linecap="round"/></svg>
+            <h4>Save Your Favorites</h4>
+            <p class="muted">Create collections to cook later.</p>
+        </div>
+
+        <div class="step">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18" stroke="#e67e22" stroke-width="2" stroke-linecap="round"/></svg>
+            <h4>Learn Step-by-Step</h4>
+            <p class="muted">Clear instructions and chef tips for every dish.</p>
+        </div>
+
+        <div class="step">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2c5 0 9 4 9 9s-4 9-9 9-9-4-9-9 4-9 9-9z" stroke="#2ecc71" stroke-width="1.6"/></svg>
+            <h4>Cook Like a Pro</h4>
+            <p class="muted">Master techniques and impress guests.</p>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer aria-label="Footer">
+        <div class="footer-inner">
+            <div class="sitemap">
+                <div class="col">
+                    <h5>Site Map</h5>
+                    <a href="front.html">Home</a>
+                    <a href="recipes.html">Recipes</a>
+                    <a href="recipes.html#popular" style="margin-left:10px">Popular</a>
+                    <a href="recipes.html#new" style="margin-left:10px">New</a>
+                </div>
+
+                <div class="col">
+                    <h5>Categories</h5>
+                    <a href="recipes.html#breakfast">Breakfast</a>
+                    <a href="recipes.html#lunch">Lunch</a>
+                    <a href="recipes.html#dinner">Dinner</a>
+                    <a href="recipes.html#desserts">Desserts</a>
+                </div>
+
+                <div class="col">
+                    <h5>Company</h5>
+                    <a href="about.html">About Us</a>
+                    <a href="contact.html">Contact Us</a>
+                    <a href="signin.html">Sign In</a>
+                    <a href="signup.html">Sign Up</a>
+                </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:12px">
+                <div class="socials" aria-label="Social links">
+                    <a href="https://instagram.com/" target="_blank" rel="noopener" style="color:#fff;text-decoration:none">Instagram</a>
+                    <a href="https://youtube.com/" target="_blank" rel="noopener" style="color:#fff;text-decoration:none">YouTube</a>
+                    <a href="https://linkedin.com/" target="_blank" rel="noopener" style="color:#fff;text-decoration:none">LinkedIn</a>
+                </div>
+                <div class="copyright">© 2025 The Chef's Corner. All Rights Reserved.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        (function(){
+            // Navbar dropdown + mobile
+            const dropdown = document.querySelector('.tcc-dropdown');
+            const dropdownToggle = dropdown && dropdown.querySelector('a');
+            const dropdownMenu = dropdown && dropdown.querySelector('.tcc-dropdown-menu');
+            const hamburger = document.getElementById('hamburger');
+            const menu = document.querySelector('.tcc-menu');
+
+            // toggle dropdown on click for accessibility + hover for desktop
+            let ddOpen = false;
+            function openDropdown(){ dropdown.classList.add('open'); dropdownToggle.setAttribute('aria-expanded','true'); ddOpen = true }
+            function closeDropdown(){ dropdown.classList.remove('open'); dropdownToggle.setAttribute('aria-expanded','false'); ddOpen = false }
+
+            dropdown && dropdown.addEventListener('mouseenter', openDropdown);
+            dropdown && dropdown.addEventListener('mouseleave', closeDropdown);
+            dropdownToggle && dropdownToggle.addEventListener('click', function(e){ e.preventDefault(); ddOpen? closeDropdown(): openDropdown(); });
+
+            // mobile hamburger
+            let mobileOpen = false;
+            hamburger && hamburger.addEventListener('click', function(){
+                if(!mobileOpen){ menu.style.display='flex'; hamburger.setAttribute('aria-expanded','true'); mobileOpen=true }
+                else{ menu.style.display=''; hamburger.setAttribute('aria-expanded','false'); mobileOpen=false }
+            });
+
+            // Slider
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const dotsContainer = document.getElementById('dots');
+            let idx = 0; let timer = null; const interval = 3000;
+
+            function goTo(i){
+                slides.forEach(s=>s.classList.remove('active'));
+                dotsContainer.querySelectorAll('.dot').forEach(d=>d.classList.remove('active'));
+                idx = (i+slides.length)%slides.length;
+                slides[idx].classList.add('active');
+                dotsContainer.querySelectorAll('.dot')[idx].classList.add('active');
+            }
+
+            function next(){ goTo(idx+1) }
+            function prev(){ goTo(idx-1) }
+
+            // build dots
+            slides.forEach((s,i)=>{
+                const d = document.createElement('button'); d.className='dot'; d.setAttribute('aria-label','Slide '+(i+1)); d.addEventListener('click', ()=>{ goTo(i); resetTimer(); });
+                dotsContainer.appendChild(d);
+            });
+            // initial
+            goTo(0);
+
+            document.getElementById('next').addEventListener('click', ()=>{ next(); resetTimer(); });
+            document.getElementById('prev').addEventListener('click', ()=>{ prev(); resetTimer(); });
+
+            function startTimer(){ timer = setInterval(next, interval); }
+            function stopTimer(){ if(timer){ clearInterval(timer); timer=null } }
+            function resetTimer(){ stopTimer(); startTimer(); }
+
+            // pause on hover/focus
+            const hero = document.querySelector('.hero');
+            hero && hero.addEventListener('mouseenter', stopTimer);
+            hero && hero.addEventListener('mouseleave', startTimer);
+            hero && hero.addEventListener('focusin', stopTimer);
+            hero && hero.addEventListener('focusout', startTimer);
+
+            // keyboard support
+            document.addEventListener('keydown', (e)=>{ if(e.key==='ArrowRight') { next(); resetTimer(); } if(e.key==='ArrowLeft'){ prev(); resetTimer(); } });
+
+            // init
+            startTimer();
+
+            // set copyright year (redundant since static 2025 required, but keep dynamic)
+            try{ const yEls = document.querySelectorAll('.copyright'); yEls.forEach(el => { el.textContent = '© ' + new Date().getFullYear() + ' The Chef\'s Corner. All Rights Reserved.' }) }catch(e){}
+        })();
+    </script>
+</body>
+</html>
